@@ -1,4 +1,4 @@
-package com.app.stusmart.screens
+package com.app.stusmart.screens.teacherscreens
 
 
 import android.net.Uri

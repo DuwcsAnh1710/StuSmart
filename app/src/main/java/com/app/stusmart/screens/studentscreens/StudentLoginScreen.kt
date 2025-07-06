@@ -1,4 +1,5 @@
-package com.app.stusmart.screens
+package com.app.stusmart.screens.studentscreens
+
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,14 +25,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.stusmart.R
 
-@Preview(showBackground = true, name = "Teacher Login Screen")
+@Preview(showBackground = true, name = "Student Login Screen Preview")
 @Composable
-fun PreviewTeacherLoginScreen() {
-    TeacherLoginScreen()}
+fun PreviewStudentLoginScreen() {
+    StudentLoginScreen()
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TeacherLoginScreen(onLoginSuccess: () -> Unit = {}){
+fun StudentLoginScreen(
+    onLoginSuccess: () -> Unit = {},
+    onRegisterClick: () -> Unit = {}
+){
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
@@ -77,7 +82,7 @@ fun TeacherLoginScreen(onLoginSuccess: () -> Unit = {}){
         Spacer(modifier = Modifier.height(40.dp))
 
         Text(
-            text = "GIÁO VIÊN",
+            text = "HỌC SINH",
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF0057D8)
@@ -98,10 +103,10 @@ fun TeacherLoginScreen(onLoginSuccess: () -> Unit = {}){
             shape = RoundedCornerShape(25.dp),
             colors = with(TextFieldDefaults) {
                 outlinedTextFieldColors(
-                        focusedBorderColor = Color(0xFF0057D8),
-                        unfocusedBorderColor = Color(0xFF0057D8),
-                        focusedLabelColor = Color(0xFF0057D8)
-                    )
+                    focusedBorderColor = Color(0xFF0057D8),
+                    unfocusedBorderColor = Color(0xFF0057D8),
+                    focusedLabelColor = Color(0xFF0057D8)
+                )
             },
             modifier = Modifier
                 .padding(horizontal = 32.dp)
@@ -129,10 +134,10 @@ fun TeacherLoginScreen(onLoginSuccess: () -> Unit = {}){
                 .fillMaxWidth(),
             colors = with(TextFieldDefaults) {
                 outlinedTextFieldColors(
-                        focusedBorderColor = Color(0xFF0057D8),
-                        unfocusedBorderColor = Color(0xFF0057D8),
-                        focusedLabelColor = Color(0xFF0057D8)
-                    )
+                    focusedBorderColor = Color(0xFF0057D8),
+                    unfocusedBorderColor = Color(0xFF0057D8),
+                    focusedLabelColor = Color(0xFF0057D8)
+                )
             }
         )
 
@@ -157,11 +162,43 @@ fun TeacherLoginScreen(onLoginSuccess: () -> Unit = {}){
             )
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.weight(1f))
 
-        TextButton(onClick = { /* xử lý quên mật khẩu */ }) {
-            Text("Quên mật khẩu?", color = Color.Gray)
+        // Các text ở giữa màn hình
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextButton(onClick = { /* xử lý quên mật khẩu */ }) {
+                Text("Quên mật khẩu?",
+                    color = Color.Gray,
+                    fontSize = 14.sp)
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Link đăng ký
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    "Chưa có tài khoản?",
+                    color = Color.Gray,
+                    fontSize = 14.sp
+                )
+                TextButton(onClick = onRegisterClick) {
+                    Text(
+                        "Đăng ký",
+                        color = Color(0xFF0057D8),
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
         }
+
+        Spacer(modifier = Modifier.height(180.dp))
     }
 }
 

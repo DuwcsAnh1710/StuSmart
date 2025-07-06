@@ -1,4 +1,4 @@
-package com.app.stusmart.screens
+package com.app.stusmart.screens.teacherscreens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,9 +30,9 @@ fun TimeTableScreen(
     var selectedDayIndex by remember { mutableStateOf(0) }
 
     val mockSchedule = mapOf(
-        0 to listOf("12A1", "12A1", "12A4", "12A5", "12A5"), // Monday
-        1 to listOf("12A2", "12A2", "12A4", "12A4", "12A5"), // Tuesday
-        2 to listOf("12A3", "12A3", "12A1", "12A1", "12A5"), // ...
+        0 to listOf("12A1", "12A1", "12A4", "12A5", "12A5"),
+        1 to listOf("12A2", "12A2", "12A4", "12A4", "12A5"),
+        2 to listOf("12A3", "12A3", "12A1", "12A1", "12A5"),
         3 to listOf("12A1", "12A2", "12A3", "12A4", "12A5"),
         4 to listOf("12A5", "12A1", "12A2", "12A3", "12A4"),
         5 to listOf("12A1", "12A1", "12A1", "12A1", "12A1")

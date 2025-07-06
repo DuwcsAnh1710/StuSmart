@@ -1,4 +1,5 @@
-package com.app.stusmart.screens
+package com.app.stusmart.screens.studentscreens
+
 
 
 import android.net.Uri
@@ -20,13 +21,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.stusmart.R
-@Preview(showBackground = true, name = "HomeWorkScreen Preview")
+@Preview(showBackground = true, name = "StudentHomeWorkScreen Preview")
 @Composable
-fun HomeWorkScreenPreview() {
-    HomeWorkScreen(onBack = {})
+fun StudentHomeWorkScreenPreview() {
+    StudentHomeWorkScreen(onBack = {})
 }
 @Composable
-fun HomeWorkScreen(
+fun StudentHomeWorkScreen(
     onBack: () -> Unit
 ) {
     var homeworkText by remember { mutableStateOf("") }
@@ -121,7 +122,7 @@ fun HomeWorkScreen(
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0057D8))
         ) {
-            Text("Giao Bài Tập", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text("Nộp Bài", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
         }
     }
 }

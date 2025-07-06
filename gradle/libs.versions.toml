@@ -14,7 +14,9 @@ animationCoreLint = "1.8.3"
 compose = "1.7.8"
 navigationRuntimeAndroid = "2.9.0"
 navigationComposeAndroid = "2.9.0" # hoặc version bạn đang dùng trong bom
-zxing = "3.5.2" # Phiên bản ZXing, có thể thay đổi tùy theo nhu cầu
+zxing = "3.5.2"
+roomCommonJvm = "2.7.2"
+roomRuntimeAndroid = "2.7.2" # Phiên bản ZXing, có thể thay đổi tùy theo nhu cầu
 
 [libraries]
 android = { module = "com.github.kenglxn.QRGen:android", version.ref = "android" }
@@ -38,6 +40,8 @@ compose-material-icons-extended = { group = "androidx.compose.material", name = 
 androidx-navigation-runtime-android = { group = "androidx.navigation", name = "navigation-runtime-android", version.ref = "navigationRuntimeAndroid" }
 androidx-navigation-compose-android = { group = "androidx.navigation", name = "navigation-compose-android", version.ref = "navigationComposeAndroid" }
 zxing-core = { group = "com.google.zxing", name = "core", version = "3.5.2" }
+androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
+androidx-room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
