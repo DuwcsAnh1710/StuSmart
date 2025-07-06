@@ -1,10 +1,9 @@
-package com.app.stuteacher.screens
+package com.app.stusmart.screens
 
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,14 +14,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberAsyncImagePainter
-import com.app.stuteacher.R
+import com.app.stusmart.R
 @Preview(showBackground = true, name = "HomeWorkScreen Preview")
 @Composable
 fun HomeWorkScreenPreview() {
@@ -33,12 +30,12 @@ fun HomeWorkScreen(
     onBack: () -> Unit
 ) {
     var homeworkText by remember { mutableStateOf("") }
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    var selectedFileUri by remember { mutableStateOf<Uri?>(null) }
 
-    val imagePickerLauncher = rememberLauncherForActivityResult(
+    val filePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
-            selectedImageUri = uri
+            selectedFileUri = uri
         }
     )
 
@@ -95,24 +92,22 @@ fun HomeWorkScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(
-            onClick = { imagePickerLauncher.launch("image/*") },
+            onClick = { filePickerLauncher.launch("application/vnd.openxmlformats-officedocument.wordprocessingml.document") },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0057D8)),
             modifier = Modifier.align(Alignment.End),
             shape = RoundedCornerShape(8.dp)
         ) {
-            Text("Tải ảnh lên", color = Color.White)
+            Text("Tải file DOCX lên", color = Color.White)
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        selectedImageUri?.let { uri ->
-            Image(
-                painter = rememberAsyncImagePainter(uri),
-                contentDescription = "Selected Image",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(180.dp),
-                contentScale = ContentScale.Crop
+        selectedFileUri?.let { uri ->
+            Text(
+                text = "Đã chọn file: ${uri.lastPathSegment}",
+                color = Color(0xFF0057D8),
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(vertical = 8.dp)
             )
         }
 

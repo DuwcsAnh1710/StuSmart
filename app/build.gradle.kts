@@ -2,14 +2,15 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.services)
 }
 
 android {
-    namespace = "com.app.stuteacher"
+    namespace = "com.app.stusmart"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.app.stuteacher"
+        applicationId = "com.app.stusmart"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -40,9 +41,16 @@ android {
 }
 
 dependencies {
+    implementation(libs.android)
+    implementation(libs.zxing.core)
+    implementation("com.github.kenglxn.QRGen:android:2.6.0")
+    implementation("com.google.zxing:core:3.5.1")
+    implementation("androidx.core:core-ktx:1.12.0")
+    // Firebase
+    implementation (platform("com.google.firebase:firebase-bom:32.7.2"))
+    implementation ("com.google.firebase:firebase-firestore-ktx")
     implementation(libs.coil.compose)
     implementation(libs.compose.material.icons.extended)
-    implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))

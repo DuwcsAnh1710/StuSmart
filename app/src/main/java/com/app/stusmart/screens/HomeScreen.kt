@@ -1,4 +1,4 @@
-package com.app.stuteacher.screens
+package com.app.stusmart.screens
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -9,6 +9,8 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -16,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.app.stuteacher.R
+import com.app.stusmart.R
 import kotlinx.coroutines.launch
 
 @Preview(showBackground = true, name = "HomeScreen Preview")
@@ -33,7 +35,7 @@ fun HomeScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var showLogoutDialog by remember { mutableStateOf(false) }
-
+    val scrollState = rememberScrollState()
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -51,9 +53,10 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFF0F4FF)) // Màu nền sáng)
+                .background(Color.White) // Nền trắng tổng thể
+                .verticalScroll(scrollState)
         ) {
-            // Header xanh và avatar
+            // Header bo cong
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -69,39 +72,51 @@ fun HomeScreen(
                 ) {
                     Icon(Icons.Default.Menu, contentDescription = "Menu", tint = Color.White)
                 }
-
-                Box(
-                    modifier = Modifier
-                        .size(180.dp)
-                        .align(Alignment.BottomCenter)
-                        .offset(y = 50.dp)
-                        .border(5.dp, Color(0xFF0628AF), CircleShape)
-                        .background(Color.White, CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.teacher_avatar),
-                        contentDescription = "Avatar",
-                        modifier = Modifier.size(100.dp)
-                    )
-                }
             }
 
-            Spacer(modifier = Modifier.height(60.dp))
+            // Avatar nổi, đặt ngoài header, offset âm để nổi lên
+            Box(
+                modifier = Modifier
+                    .size(160.dp)
+                    .offset(y = (-90).dp)
+                    .align(Alignment.CenterHorizontally)
+                    .background(Color.White, CircleShape)
+                    .border(6.dp, Color(0xFF0057D8), CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.teacher_avatar),
+                    contentDescription = "Avatar",
+                    modifier = Modifier
+                        .size(90.dp)
+                        .clip(CircleShape)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(40.dp))
 
             // Khung lời chào
             Column(
                 modifier = Modifier
                     .padding(horizontal = 24.dp)
-                    .background(Color(0xFF0057D8), shape = MaterialTheme.shapes.medium)
-                    .padding(12.dp)
+                    .background(Color(0xFF0057D8), shape = RoundedCornerShape(16.dp))
+                    .padding(14.dp)
             ) {
-                Text(
-                    text = "Chào mừng đến với StuSmart! ➜",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "Chào mừng đến với StuSmart!",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Icon(
+                        painter = painterResource(id = R.drawable.teacher_avatar),
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
                 Text(
                     text = "Ứng dụng quản lý dành cho giáo viên: điểm danh, bài tập, kết quả học tập, thời khóa biểu và nhiều hơn nữa.",
                     color = Color.White,
@@ -109,7 +124,7 @@ fun HomeScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             // Danh sách các nút chức năng
             Column(
@@ -132,7 +147,7 @@ fun HomeScreen(
                         onNavigate("grades")
                     }
                 }
-                Spacer(modifier = Modifier.height(70.dp))
+                Spacer(modifier = Modifier.height(32.dp))
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier

@@ -1,7 +1,6 @@
-package com.app.stuteacher.screens
+package com.app.stusmart.screens
 
 
-import android.app.Notification
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
-import com.app.stuteacher.R
+import com.app.stusmart.R
 @Preview(showBackground = true , name = "NotificationScreen Preview")
 @Composable
 fun NotificationScreenPreview() {

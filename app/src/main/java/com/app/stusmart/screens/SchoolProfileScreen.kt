@@ -1,4 +1,4 @@
-package com.app.stuteacher.screens
+package com.app.stusmart.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

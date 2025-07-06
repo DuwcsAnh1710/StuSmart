@@ -1,17 +1,17 @@
-package com.app.stuteacher
+package com.app.stusmart
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
-import com.app.stuteacher.navigation.AppNavGraph
-import com.app.stuteacher.ui.theme.StuTeacherTheme
+import com.app.stusmart.navigation.AppNavGraph
+import com.app.stusmart.ui.theme.StuSmartTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            StuTeacherTheme {
+            StuSmartTheme {
                 val navController = rememberNavController()
                 AppNavGraph(navController)
             }

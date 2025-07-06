@@ -16,9 +16,12 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // ⚠️ thêm dòng này
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
-rootProject.name = "StuTeacher"
+
+rootProject.name = "StuSmart"
 include(":app")
  

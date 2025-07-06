@@ -1,4 +1,4 @@
-package com.app.stuteacher.screens
+package com.app.stusmart.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.app.stuteacher.R
+import com.app.stusmart.R
 import androidx.compose.foundation.Image
 import androidx.compose.ui.tooling.preview.Preview
 

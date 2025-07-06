@@ -1,4 +1,4 @@
-package com.app.stuteacher.screens
+package com.app.stusmart.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,7 +22,7 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.app.stuteacher.R
+import com.app.stusmart.R
 
 @Preview(showBackground = true, name = "Teacher Login Screen")
 @Composable
@@ -42,7 +42,7 @@ fun TeacherLoginScreen(onLoginSuccess: () -> Unit = {}){
             .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Header với màu xanh và logo
+        // Header bo cong
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -50,24 +50,31 @@ fun TeacherLoginScreen(onLoginSuccess: () -> Unit = {}){
                 .clip(RoundedCornerShape(bottomStart = 150.dp, bottomEnd = 150.dp))
                 .background(Color(0xFF0057D8)),
             contentAlignment = Alignment.BottomCenter
+
         ) {
-            Box(
-                modifier = Modifier
-                    .size(180.dp)
-                    .offset(y = 50.dp)
-                    .border(5.dp, Color(0xFF0628AF), CircleShape)
-                    .background(Color.White, CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.teacher_avatar), // đổi đúng tên file logo bạn
-                    contentDescription = "Logo",
-                    modifier = Modifier.size(140.dp)
-                )
-            }
+            // Có thể thêm nút menu nếu cần
         }
 
-        Spacer(modifier = Modifier.height(50.dp))
+        // Avatar nổi, đặt ngoài header, offset âm để nổi lên
+        Box(
+            modifier = Modifier
+                .size(160.dp)
+                .offset(y = (-90).dp)
+                .align(Alignment.CenterHorizontally)
+                .background(Color.White, CircleShape)
+                .border(6.dp, Color(0xFF0057D8), CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.logo_stusmart),
+                contentDescription = "Logo",
+                modifier = Modifier
+                    .size(150.dp)
+                    .clip(CircleShape)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(40.dp))
 
         Text(
             text = "GIÁO VIÊN",

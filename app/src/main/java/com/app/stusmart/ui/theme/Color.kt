@@ -1,4 +1,4 @@
-package com.app.stuteacher.ui.theme
+package com.app.stusmart.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

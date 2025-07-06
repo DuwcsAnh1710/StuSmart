@@ -1,4 +1,4 @@
-package com.app.stuteacher
+package com.app.stusmart
 
 import org.junit.Test
 

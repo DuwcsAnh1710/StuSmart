@@ -1,8 +1,10 @@
-package com.app.stuteacher.screens
+package com.app.stusmart.screens
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,34 +18,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.app.stuteacher.R
+import com.app.stusmart.R
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
-@Preview(showBackground = true, name = "AttendanceScreen Preview")
-@Composable
-fun AttendanceScreenPreview() {
-    val sampleStudents = listOf(
-        Student("Nguyen Van A"),
-        Student("Tran Thi B"),
-        Student("Le Van C")
-    )
-    AttendanceScreen(studentList = sampleStudents, onBack = {})
-}
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AttendanceScreen(
     studentList: List<Student>,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onShowQR: () -> Unit
 ) {
-    val date = remember { "15/05/2025" } // Tạm cứng
-    val className = remember { "12A1" } // Tạm cứng
+    val date = remember {
+        val today = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        today.format(formatter)
+    }
+    val className = remember { "12A1" }
 
     val attendanceState = remember {
         mutableStateListOf<Pair<String, AttendanceStatus>>()
     }
 
-    // Khởi tạo nếu rỗng
     LaunchedEffect(studentList) {
         if (attendanceState.isEmpty()) {
             attendanceState.clear()
@@ -57,7 +57,6 @@ fun AttendanceScreen(
             .background(Color.White)
             .padding(16.dp)
     ) {
-        // Header
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -70,12 +69,11 @@ fun AttendanceScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // Bên trái: ảnh + dòng chữ
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
                         painter = painterResource(id = R.drawable.logo_diem_danh),
                         contentDescription = "Attendance Icon",
-                        modifier = Modifier.size(28.dp) // chỉnh kích thước tùy ý
+                        modifier = Modifier.size(28.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
@@ -85,8 +83,6 @@ fun AttendanceScreen(
                         fontWeight = FontWeight.Bold
                     )
                 }
-
-                // Bên phải: icon back hình "<"
                 IconButton(onClick = onBack) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
@@ -97,8 +93,6 @@ fun AttendanceScreen(
             }
         }
 
-
-        // Thông tin lớp và ngày
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -110,7 +104,6 @@ fun AttendanceScreen(
             Text("Date: $date", color = Color(0xFF0057D8), fontWeight = FontWeight.SemiBold)
         }
 
-        // Tiêu đề cột
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -153,7 +146,23 @@ fun AttendanceScreen(
         }
 
         Button(
-            onClick = { /* Submit attendance */ },
+            onClick = {
+                val today = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
+                val db = Firebase.firestore
+                val qrData = "$className-$today"
+                val qrInfo = hashMapOf(
+                    "createdAt" to System.currentTimeMillis(),
+                    "qrData" to qrData
+                )
+                db.collection("qr_codes").document("today")
+                    .set(qrInfo)
+                    .addOnSuccessListener {
+                        onShowQR()
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("Firestore", "Error saving QR", e)
+                    }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
@@ -165,13 +174,6 @@ fun AttendanceScreen(
     }
 }
 
-class AttendanceStatus(
-    var present: Boolean = false,
-    var absent: Boolean = false
-)
+class AttendanceStatus(var present: Boolean = false, var absent: Boolean = false)
 
-
-
-data class Student(
-    val name: String
-)
+data class Student(val name: String)
