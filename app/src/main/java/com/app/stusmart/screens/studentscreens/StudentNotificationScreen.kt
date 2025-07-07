@@ -63,7 +63,7 @@ fun StudentNotificationScreen(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        painter = painterResource(id = R.drawable.thong_bao),
+                        painter = painterResource(id = R.drawable.ic_thong_bao),
                         contentDescription = "Notification",
                         tint = Color.White,
                         modifier = Modifier.size(24.dp)
