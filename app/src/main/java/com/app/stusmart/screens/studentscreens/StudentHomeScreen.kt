@@ -1,6 +1,5 @@
 package com.app.stusmart.screens.studentscreens
 
-
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -13,8 +12,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,11 +50,10 @@ fun StudentHomeScreen(
             }
         }
     ) {
-        // Giao diện chính
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White) // Nền trắng tổng thể
+                .background(Color.White)
                 .verticalScroll(scrollState)
         ) {
             // Header bo cong
@@ -93,13 +93,14 @@ fun StudentHomeScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(0.dp))
+
 
             // Khung lời chào
             Column(
                 modifier = Modifier
                     .padding(horizontal = 24.dp)
-                    .background(Color(0xFF0057D8), shape = RoundedCornerShape(16.dp))
+                    .background(Color(0xFF0057D8), shape = RoundedCornerShape(24.dp))
                     .padding(14.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -111,60 +112,51 @@ fun StudentHomeScreen(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Icon(
-                        painter = painterResource(id = R.drawable.student_avatar),
+                        painter = painterResource(id = R.drawable.arrow_right),
                         contentDescription = null,
                         tint = Color.White,
                         modifier = Modifier.size(18.dp)
                     )
                 }
                 Text(
-                    text = "Ứng dụng quản lý dành cho giáo viên: điểm danh, bài tập, kết quả học tập, thời khóa biểu và nhiều hơn nữa.",
+                    text = "Ứng dụng quản lý sinh viên thông minh, giúp bạn dễ dàng theo dõi, tổ chức và đồng hành trong hành trình học tập hiệu quả.\n" +
+                            "Nơi mọi thông tin học tập, lớp học, điểm số và kết nối đều trong tầm tay.",
                     color = Color.White,
                     fontSize = 12.sp
                 )
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-            // Danh sách các nút chức năng
+            // Lưới icon
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f, fill = false),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                // Hàng 1: 3 icon
                 Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 15.dp)
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
                 ) {
-                    FeatureItem("Điểm Danh", R.drawable.ic_diem_danh){
-                        onNavigate("student_attendance")
-                    }
-                    FeatureItem("Bài Tập Về Nhà", R.drawable.ic_bai_tap){
-                        onNavigate("student_homework")
-                    }
-                    FeatureItem("Điểm", R.drawable.ic_ket_qua){
-                        onNavigate("student_grades")
-                    }
+                    HomeFeatureButton("Điểm danh", R.drawable.qr_code, iconColor = Color(0xFF0C46C4))
+                    HomeFeatureButton("Bài Tập", R.drawable.ic_btvn)
+                    HomeFeatureButton("Kết quả", R.drawable.ic_ket_qua)
                 }
-                Spacer(modifier = Modifier.height(32.dp))
+                // Hàng 2: 2 icon, căn giữa
                 Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 15.dp)
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
                 ) {
-                    FeatureItem("Thời Khoá Biểu", R.drawable.ic_tkb){
-                        onNavigate("student_timetable")
-                    }
-                    FeatureItem("Thông Tin", R.drawable.ic_them_hs){
-                        onNavigate("student_info")
-                    }
-                    FeatureItem("Thông Báo", R.drawable.ic_thong_bao){
-                        onNavigate("student_notification")
-                    }
+                    HomeFeatureButton("Thời Khóa Biểu", R.drawable.ic_tkb)
+                    Spacer(modifier = Modifier.width(32.dp))
+                    HomeFeatureButton("Thông Báo", R.drawable.ic_thong_bao)
                 }
             }
+
+            Spacer(modifier = Modifier.height(24.dp))
         }
 
         // Hộp thoại xác nhận đăng xuất
@@ -197,32 +189,30 @@ fun StudentHomeScreen(
 }
 
 @Composable
-fun FeatureItem(title: String, iconRes: Int, onClick: () -> Unit = {}) {
+fun HomeFeatureButton(title: String, iconRes: Int, iconColor: Color = Color(0xFF0057D8)) {
     Column(
         modifier = Modifier
-            .padding(4.dp)
-            .width(90.dp)
-            .clickable { onClick() },
-        horizontalAlignment = Alignment.CenterHorizontally
+            .size(110.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xFFE8F0FE))
+            .clickable { /* TODO: Xử lý click */ }
+            .padding(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Box(
-            modifier = Modifier
-                .size(90.dp)
-                .background(Color(0xFFd3e3fd), shape = RoundedCornerShape(20.dp)),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(id = iconRes),
-                contentDescription = title,
-                modifier = Modifier.size(48.dp)
-            )
-        }
-        Spacer(modifier = Modifier.height(6.dp))
+        Image(
+            painter = painterResource(id = iconRes),
+            contentDescription = title,
+            modifier = Modifier.size(48.dp),
+            colorFilter = ColorFilter.tint(iconColor)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = title,
-            fontSize = 12.sp,
-            color = Color(0xFF0057D8),
-            fontWeight = FontWeight.Medium
+            color = Color(0xFF0A47C5),
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center
         )
     }
 }

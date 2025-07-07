@@ -48,11 +48,11 @@ fun HomeScreen(
             }
         }
     ) {
-        // Giao diện chính
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White) // Nền trắng tổng thể
+                .background(Color.White)
                 .verticalScroll(scrollState)
         ) {
             // Header bo cong
@@ -92,7 +92,7 @@ fun HomeScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(0.dp))
 
             // Khung lời chào
             Column(
@@ -110,7 +110,7 @@ fun HomeScreen(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Icon(
-                        painter = painterResource(id = R.drawable.teacher_avatar),
+                        painter = painterResource(id = R.drawable.arrow_right),
                         contentDescription = null,
                         tint = Color.White,
                         modifier = Modifier.size(18.dp)
@@ -139,7 +139,7 @@ fun HomeScreen(
                     FeatureItem("Điểm Danh", R.drawable.ic_diem_danh){
                         onNavigate("attendance")
                     }
-                    FeatureItem("Bài Tập", R.drawable.ic_bai_tap){
+                    FeatureItem("Bài Tập", R.drawable.ic_btvn){
                         onNavigate("homework")
                     }
                     FeatureItem("Kết Quả", R.drawable.ic_ket_qua){
