@@ -26,6 +26,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.stusmart.R
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.app.stusmart.ViewModel.LoginViewModel
 
 @Preview(showBackground = true, name = "Student Login Screen Preview")
 @Composable
@@ -37,11 +39,14 @@ fun PreviewStudentLoginScreen() {
 @Composable
 fun StudentLoginScreen(
     onLoginSuccess: () -> Unit = {},
-    onRegisterClick: () -> Unit = {}
+    onRegisterClick: () -> Unit = {},
+    viewModel: LoginViewModel = viewModel()
 ){
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
+    val loginResult by viewModel.studentLoginResult.collectAsState()
+    val error by viewModel.error.collectAsState()
     val scrollState = rememberScrollState()
 
     Column(
@@ -146,7 +151,7 @@ fun StudentLoginScreen(
 
         // Nút đăng nhập
         Button(
-            onClick = { onLoginSuccess() },
+            onClick = { viewModel.loginStudent(username, password) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp),
@@ -161,6 +166,18 @@ fun StudentLoginScreen(
                 color = Color.White,
                 fontWeight = FontWeight.Bold
             )
+        }
+
+        // Hiển thị lỗi nếu có
+        error?.let {
+            Text(it, color = Color.Red, modifier = Modifier.padding(top = 8.dp))
+        }
+
+        // Nếu đăng nhập thành công, gọi callback
+        loginResult?.let {
+            LaunchedEffect(it) {
+                onLoginSuccess()
+            }
         }
 
         Spacer(modifier = Modifier.weight(1f))

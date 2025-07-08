@@ -7,21 +7,36 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Thay <username>, <password> bằng thông tin MongoDB Atlas của bạn
+// Kết nối MongoDB
 const uri = 'mongodb+srv://Minhuy_nnn:huy012230@stusmart.wp8c8q8.mongodb.net/StuSmart?retryWrites=true&w=majority';
-
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected!'))
     .catch(err => console.log(err));
+// Thiết lập port cho server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+// Định nghĩa schema và model cho Counter (bộ đếm tự tăng)
+const counterSchema = new mongoose.Schema({
+    _id: String,
+    seq: Number
+});
+const Counter = mongoose.model('Counter', counterSchema);
 
- // Khởi động server
-   const PORT = process.env.PORT || 3000;
-   app.listen(PORT, () => {
-       console.log(`Server running on port ${PORT}`);
-   });
+// Hàm lấy id tự tăng
+async function getNextSequence(name) {
+    const ret = await Counter.findByIdAndUpdate(
+        name,
+        { $inc: { seq: 1 } },
+        { new: true, upsert: true }
+    );
+    return ret.seq;
+}
 
 // Định nghĩa schema và model cho Student
 const studentSchema = new mongoose.Schema({
+    id: Number, // id tự tăng
     username: String,
     password: String,
     className: String,
@@ -34,10 +49,23 @@ const studentSchema = new mongoose.Schema({
 });
 const Student = mongoose.model('Student', studentSchema);
 
+// API đăng nhập cho học sinh
+app.post('/api/students/login', async (req, res) => {
+    console.log("Login body:", req.body); // Thêm dòng này
+    const { username, password } = req.body;
+    try {
+        const student = await Student.findOne({ username, password });
+        if (!student) return res.status(401).json({ error: 'Sai tài khoản hoặc mật khẩu' });
+        res.json(student);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 // API thêm student
 app.post('/api/students', async (req, res) => {
     try {
-        const student = new Student(req.body);
+        const nextId = await getNextSequence('studentid');
+        const student = new Student({ ...req.body, id: nextId });
         await student.save();
         res.status(201).json(student);
     } catch (err) {
@@ -88,21 +116,48 @@ app.post('/api/students', async (req, res) => {
           res.status(500).json({ error: err.message });
       }
   });
+  // API đăng nhập cho học sinh
+  app.post('/api/students/login', async (req, res) => {
+      console.log("Login body:", req.body); // Thêm dòng này
+      const { username, password } = req.body;
+      try {
+          const student = await Student.findOne({ username, password });
+          if (!student) return res.status(401).json({ error: 'Sai tài khoản hoặc mật khẩu' });
+          res.json(student);
+      } catch (err) {
+          res.status(500).json({ error: err.message });
+      }
+  });
 
    // Định nghĩa schema và model cho Teacher
    const teacherSchema = new mongoose.Schema({
+       id: Number, // id tự tăng
        firstName: String,
        lastName: String,
        idCard: String,
        gmail: String,
-       phone: String
+       phone: String,
+       password: String
    });
    const Teacher = mongoose.model('Teacher', teacherSchema);
+
+   // API đăng nhập cho giáo viên
+   app.post('/api/teachers/login', async (req, res) => {
+       const { gmail, password } = req.body;
+       try {
+           const teacher = await Teacher.findOne({ gmail, password });
+           if (!teacher) return res.status(401).json({ error: 'Sai tài khoản hoặc mật khẩu' });
+           res.json(teacher);
+       } catch (err) {
+           res.status(500).json({ error: err.message });
+       }
+   });
 
    // API thêm teacher
    app.post('/api/teachers', async (req, res) => {
        try {
-           const teacher = new Teacher(req.body);
+           const nextId = await getNextSequence('teacherid');
+           const teacher = new Teacher({ ...req.body, id: nextId });
            await teacher.save();
            res.status(201).json(teacher);
        } catch (err) {
@@ -119,3 +174,38 @@ app.post('/api/students', async (req, res) => {
            res.status(500).json({ error: err.message });
        }
    });
+   // Lấy chi tiết giáo viên theo id
+app.get('/api/teachers/:id', async (req, res) => {
+    try {
+        const teacher = await Teacher.findById(req.params.id);
+        if (!teacher) return res.status(404).json({ error: 'Teacher not found' });
+        res.json(teacher);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+    // Sửa thông tin giáo viên theo id
+app.put('/api/teachers/:id', async (req, res) => {
+    try {
+        const teacher = await Teacher.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+        if (!teacher) return res.status(404).json({ error: 'Teacher not found' });
+        res.json(teacher);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+// Xóa giáo viên theo id
+app.delete('/api/teachers/:id', async (req, res) => {
+    try {
+        const teacher = await Teacher.findByIdAndDelete(req.params.id);
+        if (!teacher) return res.status(404).json({ error: 'Teacher not found' });
+        res.json({ message: 'Teacher deleted' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+

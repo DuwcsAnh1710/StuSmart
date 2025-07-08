@@ -4,11 +4,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
-    val api: StudentApi by lazy {
+    val authApi: AuthApi by lazy {
         Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:3000/") // Đổi thành IP LAN nếu chạy trên thiết bị thật
+            .baseUrl("http://10.0.2.2:3000/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(StudentApi::class.java)
+            .create(AuthApi::class.java)
     }
 }

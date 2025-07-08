@@ -21,21 +21,9 @@ import androidx.compose.ui.unit.sp
 import com.app.stusmart.R
 import androidx.compose.foundation.Image
 import androidx.compose.ui.tooling.preview.Preview
-import com.app.stusmart.screens.teacherscreens.Student
+import com.app.stusmart.model.Student
 
-@Preview(showBackground = true, name = "GradeOverviewScreen Preview")
-@Composable
-fun GradeOverviewScreenPreview() {
-    val sampleStudents = mapOf(
-        "10A1" to listOf(Student("Nguyen Van A"), Student("Tran Thi B")),
-        "10A2" to listOf(Student("Le Van C"), Student("Pham Thi D"))
-    )
-    GradeOverviewScreen(
-        onBack = {},
-        allStudents = sampleStudents,
-        onResultClick = {}
-    )
-}
+
 @Composable
 fun GradeOverviewScreen(
     onBack: () -> Unit,

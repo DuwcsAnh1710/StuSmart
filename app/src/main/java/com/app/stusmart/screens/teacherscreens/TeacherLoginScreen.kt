@@ -23,6 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.stusmart.R
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.app.stusmart.ViewModel.LoginViewModel
 
 @Preview(showBackground = true, name = "Teacher Login Screen")
 @Composable
@@ -34,11 +36,14 @@ fun PreviewTeacherLoginScreen() {
 @Composable
 fun TeacherLoginScreen(
     onLoginSuccess: () -> Unit = {},
-    onRegisterClick: () -> Unit = {}
+    onRegisterClick: () -> Unit = {},
+    viewModel: LoginViewModel = viewModel()
 ){
-    var username by remember { mutableStateOf("") }
+    var gmail by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
+    val loginResult by viewModel.teacherLoginResult.collectAsState()
+    val error by viewModel.error.collectAsState()
 
     Column(
         modifier = Modifier
@@ -91,10 +96,10 @@ fun TeacherLoginScreen(
 
         // Tài khoản
         OutlinedTextField(
-            value = username,
-            onValueChange = { username = it },
-            label = { Text("Tài Khoản") },
-            placeholder = { Text("Tên đăng nhập") },
+            value = gmail,
+            onValueChange = { gmail = it },
+            label = { Text("Gmail") },
+            placeholder = { Text("Nhập gmail") },
             trailingIcon = {
                 Icon(Icons.Default.Person, contentDescription = "User")
             },
@@ -144,7 +149,7 @@ fun TeacherLoginScreen(
 
         // Nút đăng nhập
         Button(
-            onClick = { onLoginSuccess() },
+            onClick = { viewModel.loginTeacher(gmail, password) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp),
@@ -159,6 +164,18 @@ fun TeacherLoginScreen(
                 color = Color.White,
                 fontWeight = FontWeight.Bold
             )
+        }
+
+        // Hiển thị lỗi nếu có
+        error?.let {
+            Text(it, color = Color.Red, modifier = Modifier.padding(top = 8.dp))
+        }
+
+        // Nếu đăng nhập thành công, gọi callback
+        loginResult?.let {
+            LaunchedEffect(it) {
+                onLoginSuccess()
+            }
         }
 
         Spacer(modifier = Modifier.weight(1f))

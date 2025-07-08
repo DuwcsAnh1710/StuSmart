@@ -19,15 +19,12 @@ import androidx.compose.ui.unit.sp
 import com.app.stusmart.R
 import androidx.compose.foundation.Image
 import androidx.compose.ui.tooling.preview.Preview
-import com.app.stusmart.screens.teacherscreens.Student
+import com.app.stusmart.model.Student
 
 @Preview(showBackground = true, name = "EnterGradesStudentScreen Preview")
 @Composable
 fun EnterGradesStudentScreenPreview() {
-    val sampleStudents = mapOf(
-        "10A1" to listOf(Student("Nguyen Van A"), Student("Tran Thi B")),
-        "10A2" to listOf(Student("Le Van C"), Student("Pham Thi D"))
-    )
+    val sampleStudents = mapOf<String, List<Student>>() // Explicit type arguments
     EnterGradesStudentScreen(allStudents = sampleStudents, onBack = {})
 }
 @Composable
@@ -42,7 +39,7 @@ fun EnterGradesStudentScreen(
     val studentGrades = remember(selectedClass) {
         mutableStateMapOf<String, TextFieldValue>().apply {
             allStudents[selectedClass]?.forEach { student ->
-                put(student.name, TextFieldValue(""))
+                put(student.username, TextFieldValue(""))
             }
         }
     }
@@ -104,10 +101,10 @@ fun EnterGradesStudentScreen(
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(student.name, modifier = Modifier.weight(1f))
+                        Text(student.username, modifier = Modifier.weight(1f))
                         OutlinedTextField(
-                            value = studentGrades[student.name] ?: TextFieldValue(""),
-                            onValueChange = { studentGrades[student.name] = it },
+                            value = studentGrades[student.username] ?: TextFieldValue(""),
+                            onValueChange = { studentGrades[student.username] = it },
                             modifier = Modifier.width(80.dp),
                             singleLine = true,
                             shape = RoundedCornerShape(8.dp)

@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.app.stusmart.screens.teacherscreens.Student
+import com.app.stusmart.model.Student
 
 @Composable
 fun AttendanceScreen(
@@ -27,7 +27,7 @@ fun AttendanceScreen(
     val date = remember { "15/05/2025" }
     val attendanceState = remember {
         mutableStateMapOf<String, AttendanceStatus>().apply {
-            studentList.forEach { put(it.name, AttendanceStatus()) }
+            studentList.forEach { put(it.username, AttendanceStatus()) }
         }
     }
 
@@ -80,25 +80,25 @@ fun AttendanceScreen(
         // Student list
         LazyColumn(modifier = Modifier.weight(1f)) {
             items(studentList) { student ->
-                val status = attendanceState[student.name] ?: AttendanceStatus()
+                val status = attendanceState[student.username] ?: AttendanceStatus()
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = student.name, modifier = Modifier.weight(1f))
+                    Text(text = student.username, modifier = Modifier.weight(1f))
                     Checkbox(
                         checked = status.present,
                         onCheckedChange = {
-                            attendanceState[student.name] = status.copy(present = it, absent = if (it) false else status.absent)
+                            attendanceState[student.username] = status.copy(present = it, absent = if (it) false else status.absent)
                         }
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     Checkbox(
                         checked = status.absent,
                         onCheckedChange = {
-                            attendanceState[student.name] = status.copy(absent = it, present = if (it) false else status.present)
+                            attendanceState[student.username] = status.copy(absent = it, present = if (it) false else status.present)
                         }
                     )
                 }

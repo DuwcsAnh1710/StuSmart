@@ -1,4 +1,4 @@
-package com.app.stusmart.viewmodel
+package com.app.stusmart.ViewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,7 +15,7 @@ class StudentViewModel : ViewModel() {
     fun fetchStudents() {
         viewModelScope.launch {
             try {
-                val result = RetrofitInstance.api.getStudents()
+                val result = RetrofitInstance.authApi.getStudents()
                 _students.value = result
             } catch (e: Exception) {
                 // Xử lý lỗi nếu cần

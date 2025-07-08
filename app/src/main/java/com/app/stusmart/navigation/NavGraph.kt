@@ -2,15 +2,11 @@ package com.app.stusmart.navigation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.app.stusmart.model.Student
 import com.app.stusmart.screens.RoleSelectionScreen
 import com.app.stusmart.screens.SplashScreen
 import com.app.stusmart.screens.studentscreens.*
