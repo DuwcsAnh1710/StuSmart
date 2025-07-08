@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.app.stusmart.R
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.app.stusmart.ViewModel.LoginViewModel
+import android.util.Log
 
 @Preview(showBackground = true, name = "Student Login Screen Preview")
 @Composable
@@ -176,6 +177,7 @@ fun StudentLoginScreen(
         // Nếu đăng nhập thành công, gọi callback
         loginResult?.let {
             LaunchedEffect(it) {
+                Log.d("StudentLoginScreen", "Đăng nhập thành công, loginResult: $it")
                 onLoginSuccess()
             }
         }
