@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.stusmart.R
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
 
 @Preview(showBackground = true, name = "StudentHomeScreen Preview")
 @Composable
@@ -131,8 +133,7 @@ fun StudentHomeScreen(
             // Lưới icon
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f, fill = false),
+                    .fillMaxWidth(), // Bỏ weight để không chặn scroll
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -141,18 +142,39 @@ fun StudentHomeScreen(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 ) {
-                    HomeFeatureButton("Điểm danh", R.drawable.qr_code, iconColor = Color(0xFF0C46C4))
-                    HomeFeatureButton("Bài Tập", R.drawable.ic_btvn)
-                    HomeFeatureButton("Kết quả", R.drawable.ic_ket_qua)
+                    HomeFeatureButton(
+                        "Điểm danh", 
+                        R.drawable.qr_code, 
+                        iconColor = Color(0xFF0C46C4),
+                        onClick = { onNavigate("student_attendance") }
+                    )
+                    HomeFeatureButton(
+                        "Bài Tập", 
+                        R.drawable.ic_btvn,
+                        onClick = { onNavigate("student_homework") }
+                    )
+                    HomeFeatureButton(
+                        "Kết quả", 
+                        R.drawable.ic_ket_qua,
+                        onClick = { onNavigate("student_overview") }
+                    )
                 }
                 // Hàng 2: 2 icon, căn giữa
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 ) {
-                    HomeFeatureButton("Thời Khóa Biểu", R.drawable.ic_tkb)
+                    HomeFeatureButton(
+                        "Thời Khoá Biểu", 
+                        R.drawable.ic_tkb,
+                        onClick = { onNavigate("student_timetable") }
+                    )
                     Spacer(modifier = Modifier.width(32.dp))
-                    HomeFeatureButton("Thông Báo", R.drawable.ic_thong_bao)
+                    HomeFeatureButton(
+                        "Thông Báo", 
+                        R.drawable.ic_thong_bao,
+                        onClick = { onNavigate("student_notification") }
+                    )
                 }
             }
 
@@ -189,13 +211,31 @@ fun StudentHomeScreen(
 }
 
 @Composable
-fun HomeFeatureButton(title: String, iconRes: Int, iconColor: Color = Color(0xFF0057D8)) {
+fun HomeFeatureButton(
+    title: String, 
+    iconRes: Int, 
+    iconColor: Color = Color(0xFF0057D8),
+    onClick: () -> Unit = {}
+) {
+    var isPressed by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    
     Column(
         modifier = Modifier
             .size(110.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFFE8F0FE))
-            .clickable { /* TODO: Xử lý click */ }
+            .background(
+                if (isPressed) Color(0xFFD1E7FF) else Color(0xFFE8F0FE)
+            )
+            .clickable { 
+                isPressed = true
+                onClick()
+                // Reset pressed state after a short delay
+                scope.launch {
+                    delay(150)
+                    isPressed = false
+                }
+            }
             .padding(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center

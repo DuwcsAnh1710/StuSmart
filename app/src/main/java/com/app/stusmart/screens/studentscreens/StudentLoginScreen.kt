@@ -5,8 +5,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
@@ -40,11 +42,13 @@ fun StudentLoginScreen(
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(Color.White)
+            .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Header bo cong
@@ -55,12 +59,9 @@ fun StudentLoginScreen(
                 .clip(RoundedCornerShape(bottomStart = 150.dp, bottomEnd = 150.dp))
                 .background(Color(0xFF0057D8)),
             contentAlignment = Alignment.BottomCenter
+        ) {}
 
-        ) {
-            // Có thể thêm nút menu nếu cần
-        }
-
-        // Avatar nổi, đặt ngoài header, offset âm để nổi lên
+        // Logo nổi, đặt ngoài header, offset âm để nổi lên
         Box(
             modifier = Modifier
                 .size(160.dp)
@@ -79,7 +80,7 @@ fun StudentLoginScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(5.dp))
 
         Text(
             text = "HỌC SINH",
@@ -166,14 +167,11 @@ fun StudentLoginScreen(
 
         // Các text ở giữa màn hình
         Column(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             TextButton(onClick = { /* xử lý quên mật khẩu */ }) {
-                Text("Quên mật khẩu?",
-                    color = Color.Gray,
-                    fontSize = 14.sp)
+                Text("Quên mật khẩu?", color = Color.Gray, fontSize = 14.sp)
             }
 
             Spacer(modifier = Modifier.height(8.dp))

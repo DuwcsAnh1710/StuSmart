@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.app.stusmart.R
 import androidx.compose.foundation.Image
 import androidx.compose.ui.tooling.preview.Preview
+import com.app.stusmart.screens.teacherscreens.Student
 
 @Preview(showBackground = true, name = "EnterGradesStudentScreen Preview")
 @Composable
@@ -64,7 +65,7 @@ fun EnterGradesStudentScreen(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_diem),
+                        painter = painterResource(id = R.drawable.ic_ket_qua),
                         contentDescription = "Grade Icon",
                         modifier = Modifier.size(28.dp)
                     )

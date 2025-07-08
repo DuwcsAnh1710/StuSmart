@@ -1,47 +1,21 @@
 package com.app.stusmart.screens.studentscreens
 
-
-
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberAsyncImagePainter
 import com.app.stusmart.R
-@Preview(showBackground = true , name = "NotificationScreen Preview")
-@Composable
-fun StudentNotificationScreenPreview() {
-    StudentNotificationScreen(onBack = {})
-}
-@Composable
-fun StudentNotificationScreen(
-    onBack: () -> Unit
-) {
-    var text by remember { mutableStateOf("") }
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
-    val context = LocalContext.current
 
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = { uri -> imageUri = uri }
-    )
-
+@Composable
+fun StudentNotificationScreen(onBack: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -72,8 +46,7 @@ fun StudentNotificationScreen(
                     Text(
                         "THÔNG BÁO",
                         color = Color.White,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
+                        fontSize = 20.sp
                     )
                 }
                 IconButton(onClick = onBack) {
@@ -81,48 +54,12 @@ fun StudentNotificationScreen(
                 }
             }
         }
-
         Spacer(modifier = Modifier.height(24.dp))
-
-        Text(
-            text = "Nội dung ",
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 16.sp,
-            modifier = Modifier.padding(horizontal = 16.dp),
-            color = Color(0xFF0057D8)
-        )
-
-        OutlinedTextField(
-            value = text,
-            onValueChange = { text = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            shape = RoundedCornerShape(8.dp)
-        )
-
-        if (imageUri != null) {
-            Image(
-                painter = rememberAsyncImagePainter(imageUri),
-                contentDescription = "Selected Image",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(180.dp)
-                    .padding(horizontal = 16.dp)
-            )
-        }
-        Spacer(modifier = Modifier.weight(1f)) // Đẩy nút xuống cuối
-
-        Button(
-            onClick = { /* handle gửi thông báo */ },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
-            shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0057D8))
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            Text("Đóng", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text("Student Notification Screen", fontSize = 24.sp)
         }
     }
 }

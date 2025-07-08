@@ -78,7 +78,7 @@ fun TeacherLoginScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(5.dp))
 
         Text(
             text = "GIÁO VIÊN",
