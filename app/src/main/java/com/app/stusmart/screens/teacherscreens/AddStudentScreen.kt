@@ -18,7 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-
+import com.app.stusmart.ViewModel.StudentViewModel
+import com.app.stusmart.model.AddStudentRequest
+import androidx.lifecycle.viewmodel.compose.viewModel
 @Preview(showBackground = true, name = "AddStudentScreen Preview")
 @Composable
 fun AddStudentScreenPreview() {
@@ -28,7 +30,8 @@ fun AddStudentScreenPreview() {
 @Composable
 fun AddStudentScreen(
     onBack: () -> Unit = {},
-    onAddStudent: () -> Unit = {}
+    onAddStudent: () -> Unit = {},
+    viewModel: StudentViewModel = viewModel()
 ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -211,7 +214,13 @@ fun AddStudentScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
-                        onClick = onAddStudent,
+                        onClick = {
+                            val request = AddStudentRequest(
+                                username, password, selectedClass, fullName, email, birthDate, parentName, parentPhone, address
+                            )
+                            viewModel.addStudent(request)
+                            onAddStudent() // Nếu muốn callback sau khi thêm
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(50.dp),

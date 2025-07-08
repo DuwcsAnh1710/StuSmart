@@ -63,6 +63,7 @@ app.post('/api/students/login', async (req, res) => {
 });
 // API thêm student
 app.post('/api/students', async (req, res) => {
+    console.log("AddStudent body:", req.body);
     try {
         const nextId = await getNextSequence('studentid');
         const student = new Student({ ...req.body, id: nextId });
