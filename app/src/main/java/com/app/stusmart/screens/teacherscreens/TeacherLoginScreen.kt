@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.sp
 import com.app.stusmart.R
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.app.stusmart.ViewModel.LoginViewModel
-import com.app.stusmart.ViewModel.TeacherViewModel
 
 @Preview(showBackground = true, name = "Teacher Login Screen")
 @Composable
@@ -38,7 +37,7 @@ fun PreviewTeacherLoginScreen() {
 fun TeacherLoginScreen(
     onLoginSuccess: () -> Unit = {},
     onRegisterClick: () -> Unit = {},
-    viewModel: TeacherViewModel = viewModel()
+    viewModel: LoginViewModel = viewModel()
 ){
     var gmail by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
