@@ -1,4 +1,4 @@
-package com.app.stusmart.screens.studentscreens
+    package com.app.stusmart.screens.studentscreens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

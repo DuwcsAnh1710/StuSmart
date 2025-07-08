@@ -49,6 +49,9 @@ dependencies {
     // Firebase
     implementation (platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation ("com.google.firebase:firebase-firestore-ktx")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation(libs.coil.compose)
     implementation(libs.compose.material.icons.extended)
     implementation(libs.androidx.lifecycle.runtime.ktx)
