@@ -50,6 +50,11 @@ fun StudentLoginScreen(
     val error by viewModel.error.collectAsState()
     val scrollState = rememberScrollState()
 
+    //sau khi khai báo scrollState
+    LaunchedEffect(Unit) {
+        scrollState.animateScrollTo(500)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
