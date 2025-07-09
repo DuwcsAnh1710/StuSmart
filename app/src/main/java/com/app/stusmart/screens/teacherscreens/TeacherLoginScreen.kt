@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.sp
 import com.app.stusmart.R
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.app.stusmart.ViewModel.LoginViewModel
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 @Preview(showBackground = true, name = "Teacher Login Screen")
 @Composable
@@ -44,11 +46,18 @@ fun TeacherLoginScreen(
     var showPassword by remember { mutableStateOf(false) }
     val loginResult by viewModel.teacherLoginResult.collectAsState()
     val error by viewModel.error.collectAsState()
+    val scrollState = rememberScrollState()
+
+    // Tự động cuộn xuống khi vào màn hình
+    LaunchedEffect(Unit) {
+        scrollState.animateScrollTo(500)
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(Color.White)
+            .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Header bo cong
