@@ -1,6 +1,7 @@
 package com.app.stusmart.screens.teacherscreens
 
 import android.os.Build
+import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -9,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,6 +26,11 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import com.app.stusmart.model.AttendanceRecord
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
+import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.date.datepicker
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
@@ -54,44 +61,31 @@ fun PreviewAttendanceScreen() {
             address = "Hà Nội"
         )
     )
-    AttendanceScreen(
-        studentList = fakeStudents,
-        className = "12A1",
-        onClassChange = {},
-        onBack = {},
-        onShowQR = {},
-        onSaveAttendance = {}
-    )
+
 }
 @RequiresApi(Build.VERSION_CODES.O)
     @Composable
 fun AttendanceScreen(
     studentList: List<Student>,
     className: String,
+    selectedDate: LocalDate,
+    attendanceState: Map<String, AttendanceStatus>,
+    onAttendanceChange: (String, AttendanceStatus) -> Unit,
     onClassChange: (String) -> Unit,
+    onDateChange: (LocalDate) -> Unit,
     onBack: () -> Unit,
     onShowQR: () -> Unit,
     onSaveAttendance: (List<AttendanceRecord>) -> Unit
 ) {
     // Lấy ngày hiện tại
-    val currentDate = remember {
-        LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-    }
-
     // Danh sách lớp mẫu, bạn có thể lấy từ API nếu muốn động
-    val classList = listOf("12A1", "12A2", "11A1", "11A2")
+    val classList = listOf("10A1", "10A2","10A3","10A4","10A5","10A6","10A7","10A8", "11A1","11A2","11A3","11A4","11A5","11A6","11A7","11A8", "12A1","12A2","12A3","12A4","12A5","12A6","12A7","12A8")
     var selectedClass by remember { mutableStateOf(className) }
     
     // Cập nhật danh sách học sinh khi đổi lớp
     LaunchedEffect(selectedClass) {
         onClassChange(selectedClass)
     }
-    val attendanceState = remember {
-        mutableStateMapOf<String, AttendanceStatus>().apply {
-            studentList.forEach { put(it.username, AttendanceStatus()) }
-        }
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -147,7 +141,38 @@ fun AttendanceScreen(
                     }
                 }
             }
-            Text("Ngày: $currentDate", color = Color(0xFF0057D8), fontWeight = FontWeight.SemiBold)
+            val dateDialogState = rememberMaterialDialogState()
+            TextButton(
+                onClick = { dateDialogState.show() },
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = Color(0xFF0057D8)
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.CalendarToday,
+                    contentDescription = "Chọn ngày",
+                    tint = Color(0xFF0057D8)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text("Ngày: ${selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))}")
+            }
+
+            MaterialDialog(
+                dialogState = dateDialogState,
+                buttons = {}
+            ) {
+                datepicker(
+                    initialDate = selectedDate,
+                    title = "Chọn ngày điểm danh",
+                    colors = DatePickerDefaults.colors(
+                        headerBackgroundColor = Color(0xFF0057D8), // Màu xanh dương cho header
+                        dateActiveBackgroundColor = Color(0xFF0057D8), // Màu xanh dương cho ngày được chọn
+                        // Bạn có thể chỉnh thêm các màu khác nếu muốn
+                    )
+                ) { date ->
+                    onDateChange(date)
+                }
+            }
         }
 
         // Table header
@@ -175,15 +200,17 @@ fun AttendanceScreen(
                     Checkbox(
                         checked = status.present,
                         onCheckedChange = {
-                            attendanceState[student.username] = status.copy(present = it, absent = if (it) false else status.absent)
-                        }
+                            onAttendanceChange(student.username, status.copy(present = it, absent = if (it) false else status.absent))
+                        },
+                        colors = CheckboxDefaults.colors(checkedColor = Color(0xFF2196F3)) // Màu xanh dương
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     Checkbox(
                         checked = status.absent,
                         onCheckedChange = {
-                            attendanceState[student.username] = status.copy(absent = it, present = if (it) false else status.present)
-                        }
+                            onAttendanceChange(student.username, status.copy(absent = it, present = if (it) false else status.present))
+                        },
+                        colors = CheckboxDefaults.colors(checkedColor = Color(0xFF2196F3))
                     )
                 }
                 Divider()
@@ -204,7 +231,7 @@ fun AttendanceScreen(
                         AttendanceRecord(
                             studentUsername = username,
                             className = selectedClass,
-                            date = currentDate,
+                            date = selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                             isPresent = status.present,
                             isAbsent = status.absent
                         )
@@ -254,27 +281,32 @@ fun AttendanceScreenWrapper(
     onBack: () -> Unit,
     onShowQR: () -> Unit
 ) {
-    val viewModel: AttendanceViewModel = viewModel()
-    val students = viewModel.studentList
+    val context = LocalContext.current
+    val activity = context as? ComponentActivity
+    requireNotNull(activity) { "Not in an Activity context!" }
+    val viewModel: AttendanceViewModel = viewModel(activity)
     var className by remember { mutableStateOf(initialClassName) }
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
 
-    // Lấy danh sách học sinh khi vào màn hình lần đầu
-    LaunchedEffect(Unit) {
-        viewModel.fetchStudents(initialClassName)
+    // Load lại khi đổi lớp hoặc ngày
+    LaunchedEffect(className, selectedDate) {
+        viewModel.fetchStudents(className)
+        viewModel.loadAttendanceState(context, selectedDate)
     }
 
     AttendanceScreen(
-        studentList = students,
+        studentList = viewModel.studentList,
         className = className,
-        onClassChange = { newClass ->
-            className = newClass
-            // Gọi API lấy danh sách học sinh theo lớp mới
-            viewModel.fetchStudents(newClass)
+        selectedDate = selectedDate,
+        attendanceState = viewModel.attendanceState,
+        onAttendanceChange = { username, status ->
+            viewModel.updateAttendance(username, status, context, selectedDate)
         },
+        onClassChange = { newClass -> className = newClass },
+        onDateChange = { newDate -> selectedDate = newDate },
         onBack = onBack,
         onShowQR = onShowQR,
         onSaveAttendance = { attendanceRecords ->
-            // Gọi ViewModel để lưu điểm danh
             viewModel.saveAttendance(attendanceRecords)
         }
     )

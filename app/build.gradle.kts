@@ -86,4 +86,8 @@ dependencies {
     implementation("androidx.camera:camera-view:1.3.0")
 // ML Kit Barcode Scanning
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
+    //thư viện Gson
+    implementation ("com.google.code.gson:gson:2.10.1")
+    implementation ("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")
+
 }

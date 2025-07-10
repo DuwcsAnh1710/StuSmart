@@ -34,7 +34,8 @@ async function getNextSequence(name) {
     return ret.seq;
 }
 
-// Định nghĩa schema và model cho Student
+// ===== MODEL KHAI BÁO TRƯỚC =====
+// Student
 const studentSchema = new mongoose.Schema({
     id: Number, // id tự tăng
     username: String,
@@ -49,9 +50,9 @@ const studentSchema = new mongoose.Schema({
 });
 const Student = mongoose.model('Student', studentSchema);
 
-// API đăng nhập cho học sinh
+// ==== STUDENT API ====
 app.post('/api/students/login', async (req, res) => {
-    console.log("Login body:", req.body); // Thêm dòng này
+    console.log("Login body:", req.body);
     const { username, password } = req.body;
     try {
         const student = await Student.findOne({ username, password });
@@ -61,7 +62,6 @@ app.post('/api/students/login', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-// API thêm student
 app.post('/api/students', async (req, res) => {
     console.log("AddStudent body:", req.body);
     try {
@@ -72,115 +72,88 @@ app.post('/api/students', async (req, res) => {
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
-});// API lấy danh sách student
-   app.get('/api/students', async (req, res) => {
-       try {
-           const students = await Student.find();
-           res.json(students);
-       } catch (err) {
-           res.status(500).json({ error: err.message });
-       }
-   });
-   // Sửa thông tin học sinh theo id
-   app.put('/api/students/:id', async (req, res) => {
-       try {
-           const student = await Student.findByIdAndUpdate(
-               req.params.id,
-               req.body,
-               { new: true } // trả về document đã cập nhật
-           );
-           if (!student) return res.status(404).json({ error: 'Student not found' });
-           res.json(student);
-       } catch (err) {
-           res.status(400).json({ error: err.message });
-       }
-   });
-   // Xóa học sinh theo id
-   app.delete('/api/students/:id', async (req, res) => {
-       try {
-           const student = await Student.findByIdAndDelete(req.params.id);
-           if (!student) return res.status(404).json({ error: 'Student not found' });
-           res.json({ message: 'Student deleted' });
-       } catch (err) {
-           res.status(500).json({ error: err.message });
-       }
-   });
-
-
-  // Lấy thông tin học sinh theo id
-  app.get('/api/students/:id', async (req, res) => {
-      try {
-          const student = await Student.findById(req.params.id);
-          if (!student) return res.status(404).json({ error: 'Student not found' });
-          res.json(student);
-      } catch (err) {
-          res.status(500).json({ error: err.message });
-      }
-  });
-  // API đăng nhập cho học sinh
-  app.post('/api/students/login', async (req, res) => {
-      console.log("Login body:", req.body); // Thêm dòng này
-      const { username, password } = req.body;
-      try {
-          const student = await Student.findOne({ username, password });
-          if (!student) return res.status(401).json({ error: 'Sai tài khoản hoặc mật khẩu' });
-          res.json(student);
-      } catch (err) {
-          res.status(500).json({ error: err.message });
-      }
-  });
-   // GET /api/students
+});
 app.get('/api/students', async (req, res) => {
-    const students = await Student.find({}); // Lấy TẤT CẢ học sinh
-    res.json(students);
+    try {
+        const students = await Student.find();
+        res.json(students);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+app.get('/api/students/:id', async (req, res) => {
+    try {
+        const student = await Student.findById(req.params.id);
+        if (!student) return res.status(404).json({ error: 'Student not found' });
+        res.json(student);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+app.put('/api/students/:id', async (req, res) => {
+    try {
+        const student = await Student.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+        if (!student) return res.status(404).json({ error: 'Student not found' });
+        res.json(student);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+app.delete('/api/students/:id', async (req, res) => {
+    try {
+        const student = await Student.findByIdAndDelete(req.params.id);
+        if (!student) return res.status(404).json({ error: 'Student not found' });
+        res.json({ message: 'Student deleted' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-   // Định nghĩa schema và model cho Teacher
-   const teacherSchema = new mongoose.Schema({
-       id: Number, // id tự tăng
-       firstName: String,
-       lastName: String,
-       idCard: String,
-       gmail: String,
-       phone: String,
-       password: String
-   });
-   const Teacher = mongoose.model('Teacher', teacherSchema);
+// Teacher
+const teacherSchema = new mongoose.Schema({
+    id: Number, // id tự tăng
+    firstName: String,
+    lastName: String,
+    idCard: String,
+    gmail: String,
+    phone: String,
+    password: String
+});
+const Teacher = mongoose.model('Teacher', teacherSchema);
 
-   // API đăng nhập cho giáo viên
-   app.post('/api/teachers/login', async (req, res) => {
-       const { gmail, password } = req.body;
-       try {
-           const teacher = await Teacher.findOne({ gmail, password });
-           if (!teacher) return res.status(401).json({ error: 'Sai tài khoản hoặc mật khẩu' });
-           res.json(teacher);
-       } catch (err) {
-           res.status(500).json({ error: err.message });
-       }
-   });
-
-   // API thêm teacher
-   app.post('/api/teachers', async (req, res) => {
-       try {
-           const nextId = await getNextSequence('teacherid');
-           const teacher = new Teacher({ ...req.body, id: nextId });
-           await teacher.save();
-           res.status(201).json(teacher);
-       } catch (err) {
-           res.status(400).json({ error: err.message });
-       }
-   });
-
-   // API lấy danh sách teacher
-   app.get('/api/teachers', async (req, res) => {
-       try {
-           const teachers = await Teacher.find();
-           res.json(teachers);
-       } catch (err) {
-           res.status(500).json({ error: err.message });
-       }
-   });
-   // Lấy chi tiết giáo viên theo id
+// ==== TEACHER API ====
+app.post('/api/teachers/login', async (req, res) => {
+    const { gmail, password } = req.body;
+    try {
+        const teacher = await Teacher.findOne({ gmail, password });
+        if (!teacher) return res.status(401).json({ error: 'Sai tài khoản hoặc mật khẩu' });
+        res.json(teacher);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+app.post('/api/teachers', async (req, res) => {
+    try {
+        const nextId = await getNextSequence('teacherid');
+        const teacher = new Teacher({ ...req.body, id: nextId });
+        await teacher.save();
+        res.status(201).json(teacher);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+app.get('/api/teachers', async (req, res) => {
+    try {
+        const teachers = await Teacher.find();
+        res.json(teachers);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 app.get('/api/teachers/:id', async (req, res) => {
     try {
         const teacher = await Teacher.findById(req.params.id);
@@ -190,7 +163,6 @@ app.get('/api/teachers/:id', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-    // Sửa thông tin giáo viên theo id
 app.put('/api/teachers/:id', async (req, res) => {
     try {
         const teacher = await Teacher.findByIdAndUpdate(
@@ -204,7 +176,6 @@ app.put('/api/teachers/:id', async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 });
-// Xóa giáo viên theo id
 app.delete('/api/teachers/:id', async (req, res) => {
     try {
         const teacher = await Teacher.findByIdAndDelete(req.params.id);
@@ -215,24 +186,27 @@ app.delete('/api/teachers/:id', async (req, res) => {
     }
 });
 
+// Attendance
 const AttendanceSchema = new mongoose.Schema({
-  studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Student', required: true },
-  classId: { type: mongoose.Schema.Types.ObjectId, ref: 'Class', required: true },
-  date: { type: Date, required: true },
-  status: { type: String, enum: ['present', 'absent'], required: true }
+  studentUsername: String,
+  className: String,
+  date: String,
+  isPresent: Boolean,
+  isAbsent: Boolean
 });
-
 const Attendance = mongoose.model('Attendance', AttendanceSchema);
 
-app.post('/api/attendance', async (req, res) => {
-    try {
-        console.log('Received attendance:', req.body); // Thêm dòng này
-        const records = req.body;
-        await Attendance.insertMany(records);
-        res.json({ success: true });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+// ==== ATTENDANCE API ====
+app.post('/attendance', async (req, res) => {
+  console.log('Received attendance:', JSON.stringify(req.body, null, 2));
+  try {
+    await Attendance.insertMany(req.body);
+    console.log('Lưu điểm danh thành công!');
+    res.status(201).json({ message: 'Lưu điểm danh thành công!' });
+  } catch (err) {
+    console.error('Lỗi lưu điểm danh:', err);
+    res.status(500).json({ error: 'Lỗi server' });
+  }
 });
 
 

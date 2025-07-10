@@ -6,11 +6,13 @@ import androidx.compose.runtime.*
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.app.stusmart.ViewModel.AttendanceViewModel
 import com.app.stusmart.model.Student
 import com.app.stusmart.screens.RoleSelectionScreen
 import com.app.stusmart.screens.SplashScreen
 import com.app.stusmart.screens.studentscreens.*
 import com.app.stusmart.screens.teacherscreens.*
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -70,7 +72,8 @@ fun AppNavGraph(navController: NavHostController) {
             )
         }
 
-        composable("attendance") {
+        composable("attendance") { navBackStackEntry ->
+            val viewModel: AttendanceViewModel = viewModel(navBackStackEntry)
             AttendanceScreenWrapper(
                 initialClassName = "12A1",
                 onBack = { navController.navigate("home") },

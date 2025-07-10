@@ -15,6 +15,6 @@ interface AuthApi {
     suspend fun teacherLogin(@Body request: TeacherLoginRequest): Teacher
     @POST("api/students")
     suspend fun addStudent(@Body request: AddStudentRequest): Student
-    @POST("api/attendance")
+    @POST("attendance")
     suspend fun saveAttendance(@Body records: List<AttendanceRecord>)
 }
