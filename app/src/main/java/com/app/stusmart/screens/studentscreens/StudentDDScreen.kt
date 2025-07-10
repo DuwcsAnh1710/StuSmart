@@ -36,10 +36,12 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.border
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
 import androidx.compose.foundation.clickable
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -130,26 +132,33 @@ fun StudentDDScreen(
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         Spacer(modifier = Modifier.height(12.dp))
-        // Camera Preview
+// Camera Preview
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(260.dp)
-                .padding(horizontal = 24.dp)
-                .background(Color.Black, RoundedCornerShape(8.dp)),
+                .size(300.dp) // Hình vuông cố định
+                .align(Alignment.CenterHorizontally)
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color.Black) // Nền an toàn trong lúc camera khởi tạo
+                .border(1.dp, Color.Gray, RoundedCornerShape(16.dp)),
             contentAlignment = Alignment.Center
         ) {
             AndroidView(
                 factory = { ctx ->
-                    val previewView = PreviewView(ctx)
+                    val previewView = PreviewView(ctx).apply {
+                        setBackgroundColor(android.graphics.Color.TRANSPARENT)
+                        scaleType = PreviewView.ScaleType.FILL_CENTER
+                    }
+
                     val cameraProvider = cameraProviderFuture.get()
                     val preview = CameraPreview.Builder().build().also {
                         it.setSurfaceProvider(previewView.surfaceProvider)
                     }
+
                     val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
                     val imageAnalysis = ImageAnalysis.Builder()
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .build()
+                    //nhận diện mã QR
                     imageAnalysis.setAnalyzer(
                         ContextCompat.getMainExecutor(ctx),
                         QrCodeAnalyzer { qr ->
@@ -161,13 +170,17 @@ fun StudentDDScreen(
                             }
                         }
                     )
+
                     cameraProvider.unbindAll()
                     cameraProvider.bindToLifecycle(
                         lifecycleOwner, cameraSelector, preview, imageAnalysis
                     )
+
                     previewView
                 },
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(16.dp))
             )
         }
         Spacer(modifier = Modifier.height(32.dp))
