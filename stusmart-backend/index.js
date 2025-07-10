@@ -216,14 +216,14 @@ app.delete('/api/teachers/:id', async (req, res) => {
 });
 
 const AttendanceSchema = new mongoose.Schema({
-    studentUsername: String,
-    className: String,
-    date: String, // hoặc Date nếu muốn
-    isPresent: Boolean,
-    isAbsent: Boolean
+  studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Student', required: true },
+  classId: { type: mongoose.Schema.Types.ObjectId, ref: 'Class', required: true },
+  date: { type: Date, required: true },
+  status: { type: String, enum: ['present', 'absent'], required: true }
 });
 
-const Attendance = require('./models/Attendance');
+const Attendance = mongoose.model('Attendance', AttendanceSchema);
+
 app.post('/api/attendance', async (req, res) => {
     try {
         console.log('Received attendance:', req.body); // Thêm dòng này
