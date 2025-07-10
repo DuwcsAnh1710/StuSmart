@@ -58,7 +58,6 @@ fun StudentHomeScreen(
                 .background(Color.White)
                 .verticalScroll(scrollState)
         ) {
-            // Header bo cong
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

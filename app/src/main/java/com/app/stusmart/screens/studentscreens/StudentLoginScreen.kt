@@ -187,7 +187,7 @@ fun StudentLoginScreen(
             }
         }
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(2.dp))
 
         // Các text ở giữa màn hình
         Column(
@@ -199,25 +199,6 @@ fun StudentLoginScreen(
             }
 
             Spacer(modifier = Modifier.height(8.dp))
-
-            // Link đăng ký
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    "Chưa có tài khoản?",
-                    color = Color.Gray,
-                    fontSize = 14.sp
-                )
-                TextButton(onClick = onRegisterClick) {
-                    Text(
-                        "Đăng ký",
-                        color = Color(0xFF0057D8),
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
         }
 
         Spacer(modifier = Modifier.height(180.dp))
