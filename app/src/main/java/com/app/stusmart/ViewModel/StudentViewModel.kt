@@ -19,13 +19,15 @@ class StudentViewModel : ViewModel() {
     private val _addStudentError = MutableStateFlow<String?>(null)
     val addStudentError: StateFlow<String?> = _addStudentError
 
-    fun fetchStudents() {
+    fun fetchStudents(className: String) {
         viewModelScope.launch {
             try {
-                val result = RetrofitInstance.authApi.getStudents()
-                _students.value = result
+                val allStudents = RetrofitInstance.authApi.getStudents()
+                // Lọc học sinh theo lớp trong app
+                _students.value = allStudents.filter { it.className == className }
             } catch (e: Exception) {
                 // Xử lý lỗi nếu cần
+                _students.value = emptyList()
             }
         }
     }
@@ -33,11 +35,11 @@ class StudentViewModel : ViewModel() {
     fun addStudent(request: AddStudentRequest) {
         viewModelScope.launch {
             try {
-                val student = RetrofitInstance.authApi.addStudent(request)
-                _addStudentResult.value = student
-                _addStudentError.value = null
+                val result = RetrofitInstance.authApi.addStudent(request)
+                _addStudentResult.value = result
+                // Có thể fetch lại danh sách ở đây nếu muốn
             } catch (e: Exception) {
-                _addStudentError.value = "Lỗi thêm học sinh: ${e.message}"
+                _addStudentError.value = e.message
             }
         }
     }

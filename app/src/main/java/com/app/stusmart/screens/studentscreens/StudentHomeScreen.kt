@@ -146,7 +146,7 @@ fun StudentHomeScreen(
                         "Điểm danh", 
                         R.drawable.qr_code, 
                         iconColor = Color(0xFF0C46C4),
-                        onClick = { onNavigate("student_attendance") }
+                        onClick = { onNavigate("student_dd") }
                     )
                     HomeFeatureButton(
                         "Bài Tập", 

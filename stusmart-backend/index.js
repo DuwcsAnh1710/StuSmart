@@ -129,6 +129,11 @@ app.post('/api/students', async (req, res) => {
           res.status(500).json({ error: err.message });
       }
   });
+   // GET /api/students
+app.get('/api/students', async (req, res) => {
+    const students = await Student.find({}); // Lấy TẤT CẢ học sinh
+    res.json(students);
+});
 
    // Định nghĩa schema và model cho Teacher
    const teacherSchema = new mongoose.Schema({
@@ -209,4 +214,26 @@ app.delete('/api/teachers/:id', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+const AttendanceSchema = new mongoose.Schema({
+    studentUsername: String,
+    className: String,
+    date: String, // hoặc Date nếu muốn
+    isPresent: Boolean,
+    isAbsent: Boolean
+});
+
+const Attendance = require('./models/Attendance');
+app.post('/api/attendance', async (req, res) => {
+    try {
+        console.log('Received attendance:', req.body); // Thêm dòng này
+        const records = req.body;
+        await Attendance.insertMany(records);
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
 

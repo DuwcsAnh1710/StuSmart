@@ -16,7 +16,10 @@ navigationRuntimeAndroid = "2.9.0"
 navigationComposeAndroid = "2.9.0" # hoặc version bạn đang dùng trong bom
 zxing = "3.5.2"
 roomCommonJvm = "2.7.2"
-roomRuntimeAndroid = "2.7.2" # Phiên bản ZXing, có thể thay đổi tùy theo nhu cầu
+roomRuntimeAndroid = "2.7.2"
+cameraCore = "1.4.2"
+playServicesMlkitBarcodeScanning = "18.3.1"
+cameraView = "1.4.2" # Phiên bản ZXing, có thể thay đổi tùy theo nhu cầu
 
 [libraries]
 android = { module = "com.github.kenglxn.QRGen:android", version.ref = "android" }
@@ -42,6 +45,9 @@ androidx-navigation-compose-android = { group = "androidx.navigation", name = "n
 zxing-core = { group = "com.google.zxing", name = "core", version = "3.5.2" }
 androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
 androidx-room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
+androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraCore" }
+play-services-mlkit-barcode-scanning = { group = "com.google.android.gms", name = "play-services-mlkit-barcode-scanning", version.ref = "playServicesMlkitBarcodeScanning" }
+androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraView" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

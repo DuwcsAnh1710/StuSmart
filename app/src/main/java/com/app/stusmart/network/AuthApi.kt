@@ -4,6 +4,7 @@ import com.app.stusmart.model.*
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface AuthApi {
     @POST("api/students/login")
@@ -14,4 +15,6 @@ interface AuthApi {
     suspend fun teacherLogin(@Body request: TeacherLoginRequest): Teacher
     @POST("api/students")
     suspend fun addStudent(@Body request: AddStudentRequest): Student
+    @POST("api/attendance")
+    suspend fun saveAttendance(@Body records: List<AttendanceRecord>)
 }

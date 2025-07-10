@@ -52,7 +52,7 @@ fun AppNavGraph(navController: NavHostController) {
                     navController.navigate(targetRoute)
                 },
                 onLogout = {
-                    navController.navigate("teacher_login") {
+                    navController.navigate("role_selection") {
                         popUpTo("home") { inclusive = true }
                     }
                 }
@@ -71,8 +71,8 @@ fun AppNavGraph(navController: NavHostController) {
         }
 
         composable("attendance") {
-            AttendanceScreen(
-                studentList = studentList,
+            AttendanceScreenWrapper(
+                initialClassName = "12A1",
                 onBack = { navController.navigate("home") },
                 onShowQR = { navController.navigate("qr_screen") }
             )
@@ -123,9 +123,15 @@ fun AppNavGraph(navController: NavHostController) {
 
         composable("student_home") {
             StudentHomeScreen(
-                onNavigate = { route -> navController.navigate(route) },
+                onNavigate = { route ->
+                    if (route == "student_dd") {
+                        navController.navigate("student_dd")
+                    } else {
+                        navController.navigate(route)
+                    }
+                },
                 onLogout = {
-                    navController.navigate("student_login") {
+                    navController.navigate("role_selection") {
                         popUpTo("student_home") { inclusive = true }
                     }
                 }
@@ -145,7 +151,9 @@ fun AppNavGraph(navController: NavHostController) {
         }
 
         composable("student_overview") {
-            StudentOverviewScreen()
+            StudentOverviewScreen(
+                onBack = { navController.navigate("student_home") }
+            )
         }
 
         composable("student_info") {
@@ -156,8 +164,10 @@ fun AppNavGraph(navController: NavHostController) {
             StudentOverviewScreen()
         }
 
-        composable("student_attendance") {
-            StudentOverviewScreen()
+        composable("student_dd") {
+            StudentDDScreen(
+                onBack = { navController.popBackStack() }
+            )
         }
 
         composable("student_grades") {

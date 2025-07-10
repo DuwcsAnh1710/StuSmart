@@ -219,7 +219,9 @@ fun AddStudentScreen(
                                 username, password, selectedClass, fullName, email, birthDate, parentName, parentPhone, address
                             )
                             viewModel.addStudent(request)
-                            onAddStudent() // Nếu muốn callback sau khi thêm
+                            // Sau khi thêm thành công, cập nhật lại danh sách học sinh
+                            viewModel.fetchStudents(selectedClass)
+                            onAddStudent() // Callback nếu muốn điều hướng hoặc thông báo
                         },
                         modifier = Modifier
                             .fillMaxWidth()
