@@ -81,7 +81,8 @@ fun AttendanceScreen(
     // Danh sách lớp mẫu, bạn có thể lấy từ API nếu muốn động
     val classList = listOf("10A1", "10A2","10A3","10A4","10A5","10A6","10A7","10A8", "11A1","11A2","11A3","11A4","11A5","11A6","11A7","11A8", "12A1","12A2","12A3","12A4","12A5","12A6","12A7","12A8")
     var selectedClass by remember { mutableStateOf(className) }
-    
+    var tempSelectedDate by remember { mutableStateOf(selectedDate) }
+
     // Cập nhật danh sách học sinh khi đổi lớp
     LaunchedEffect(selectedClass) {
         onClassChange(selectedClass)
@@ -159,19 +160,36 @@ fun AttendanceScreen(
 
             MaterialDialog(
                 dialogState = dateDialogState,
-                buttons = {}
+                buttons = {
+                    positiveButton(
+                        text = "Xác nhận",
+                        textStyle = LocalTextStyle.current.copy(
+                            color = Color(0xFF0057D8), // Màu xanh dương đậm
+                            fontWeight = FontWeight.Bold
+                        )
+                    ) {
+                        onDateChange(tempSelectedDate)
+                    }
+                    negativeButton(
+                        text = "Huỷ",
+                        textStyle = LocalTextStyle.current.copy(
+                            color = Color.Gray,
+                            fontWeight = FontWeight.Medium
+                        )
+                    )
+                }
             ) {
                 datepicker(
                     initialDate = selectedDate,
                     title = "Chọn ngày điểm danh",
                     colors = DatePickerDefaults.colors(
-                        headerBackgroundColor = Color(0xFF0057D8), // Màu xanh dương cho header
-                        dateActiveBackgroundColor = Color(0xFF0057D8), // Màu xanh dương cho ngày được chọn
-                        // Bạn có thể chỉnh thêm các màu khác nếu muốn
-                    )
-                ) { date ->
-                    onDateChange(date)
-                }
+                        headerBackgroundColor = Color(0xFF0057D8),
+                        dateActiveBackgroundColor = Color(0xFF0057D8)
+                    ),
+                    onDateChange = { date ->
+                        tempSelectedDate = date
+                    }
+                )
             }
         }
 

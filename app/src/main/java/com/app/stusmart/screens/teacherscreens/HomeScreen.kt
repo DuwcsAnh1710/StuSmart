@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -197,32 +198,33 @@ fun HomeScreen(
 
 @Composable
 fun FeatureItem(title: String, iconRes: Int, onClick: () -> Unit = {}) {
-    Column(
+    Box(
         modifier = Modifier
             .padding(4.dp)
             .width(90.dp)
-            .clickable { onClick() },
-        horizontalAlignment = Alignment.CenterHorizontally
+            .height(100.dp)
+            .clickable { onClick() }
+            .background(Color(0xFFd3e3fd), shape = RoundedCornerShape(20.dp)),
+        contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier
-                .size(90.dp)
-                .background(Color(0xFFd3e3fd), shape = RoundedCornerShape(20.dp)),
-            contentAlignment = Alignment.Center
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()
         ) {
             Image(
                 painter = painterResource(id = iconRes),
                 contentDescription = title,
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier.size(40.dp)
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = title,
+                fontSize = 14.sp,
+                color = Color(0xFF0057D8),
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
             )
         }
-        Spacer(modifier = Modifier.height(6.dp))
-        Text(
-            text = title,
-            fontSize = 12.sp,
-            color = Color(0xFF0057D8),
-            fontWeight = FontWeight.Medium
-        )
     }
 }
-
